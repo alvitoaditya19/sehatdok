@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "571464960016",
+    "project_id": "vacation-3072b",
+    "storage_bucket": "vacation-3072b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571464960016:android:4cc7dc0c40ccbbb9fa6295",
+        "android_client_info": {
+          "package_name": "com.example.sehatdok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571464960016-1kafboeqi0bltbd14ic80sl2s4c0km49.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQauKTz24KdQTCT1BK6NTtmUDoq9o3JX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571464960016-1kafboeqi0bltbd14ic80sl2s4c0km49.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
