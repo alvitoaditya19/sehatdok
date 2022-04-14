@@ -8,6 +8,7 @@ class DetailPage extends StatefulWidget {
   final String address;
   final String gmaps;
   final String spesialis;
+  final String userId;
 
   DetailPage({
     this.imageUrl,
@@ -17,6 +18,7 @@ class DetailPage extends StatefulWidget {
     this.price,
     this.gmaps,
     this.spesialis,
+    this.userId
   });
   
   @override
@@ -330,6 +332,7 @@ class _DetailPageState extends State<DetailPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => BookingPage(detailPage: DetailPage(
+                                   
                                           imageUrl: widget.imageUrl,
                                           name: widget.name,
                                           price: widget.price,

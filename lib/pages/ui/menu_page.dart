@@ -504,113 +504,132 @@ class _MenuPageState extends State<MenuPage> {
     }
 
     Widget Doctor() {
-      return Container(
-        child: _foundUsers.isNotEmpty
-            ? ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _foundUsers.length,
-                padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-                itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailPage(
-                              imageUrl: _foundUsers[index]['imageUrl'],
-                              name: _foundUsers[index]['name'],
-                              rating: _foundUsers[index]["rating"],
-                              price: _foundUsers[index]['price'],
-                              spesialis: _foundUsers[index]['spesialis'],
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.only(top: 14),
-                        decoration: BoxDecoration(
-                          color: kWhiteColor,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 70,
-                              height: 70,
-                              margin: EdgeInsets.only(right: 16),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                    _foundUsers[index]['imageUrl'],
-                                  ),
+      return Container(child: BlocBuilder<UserBloc, UserState>(
+        builder: (_, userState) {
+          if (userState is UserLoaded) {
+            if (imageFileToUpload != null) {
+              uploadImage(imageFileToUpload).then((downloadURL) {
+                imageFileToUpload = null;
+                context
+                    .bloc<UserBloc>()
+                    .add(UpdateData(profileImage: downloadURL));
+              });
+            }
+            return _foundUsers.isNotEmpty
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _foundUsers.length,
+                    padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+                    itemBuilder: (context, index) => GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPage(
+                                  userId: userState.user.id,
+                                  imageUrl: _foundUsers[index]['imageUrl'],
+                                  name: _foundUsers[index]['name'],
+                                  rating: _foundUsers[index]["rating"],
+                                  price: _foundUsers[index]['price'],
+                                  spesialis: _foundUsers[index]['spesialis'],
                                 ),
                               ),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.only(top: 14),
+                            decoration: BoxDecoration(
+                              color: kWhiteColor,
+                              borderRadius: BorderRadius.circular(18),
                             ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _foundUsers[index]['name'],
-                                    style: blackTextStyle.copyWith(
-                                      fontSize: 18,
-                                      fontWeight: medium,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    _foundUsers[index]['spesialis'],
-                                    style: greyTextStyle.copyWith(
-                                      fontWeight: light,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
                               children: [
                                 Container(
-                                  height: 20,
-                                  width: 20,
-                                  margin: EdgeInsets.only(
-                                    right: 2,
-                                  ),
+                                  width: 70,
+                                  height: 70,
+                                  margin: EdgeInsets.only(right: 16),
                                   decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18),
                                     image: DecorationImage(
+                                      fit: BoxFit.cover,
                                       image: AssetImage(
-                                        'assets/icon_star.png',
+                                        _foundUsers[index]['imageUrl'],
                                       ),
                                     ),
                                   ),
                                 ),
-                                Text(
-                                  _foundUsers[index]['rating'].toString(),
-                                  style: blackTextStyle.copyWith(
-                                    fontWeight: medium,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _foundUsers[index]['name'],
+                                        style: blackTextStyle.copyWith(
+                                          fontSize: 18,
+                                          fontWeight: medium,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        _foundUsers[index]['spesialis'],
+                                        style: greyTextStyle.copyWith(
+                                          fontWeight: light,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      margin: EdgeInsets.only(
+                                        right: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                            'assets/icon_star.png',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      _foundUsers[index]['rating'].toString(),
+                                      style: blackTextStyle.copyWith(
+                                        fontWeight: medium,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ))
+                : Center(
+                    child: Text(
+                      'No results found',
+                      style: greyTextStyle.copyWith(
+                        fontSize: 18,
                       ),
-                    ))
-            : Center(
-                child: Text(
-                  'No results found',
-                  style: greyTextStyle.copyWith(
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-      );
+                    ),
+                  );
+          }else {
+            return SpinKitFadingCircle(
+              color: kBlueColor,
+              size: 50,
+            );
+          }
+        },
+      ));
     }
 
     return WillPopScope(
