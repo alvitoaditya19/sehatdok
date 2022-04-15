@@ -15,24 +15,10 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
   int jml = 1;
-  String time = 'Tap to Select the Date';
+  String time = 'Ketuk untuk Memilih';
   bool dateService = true;
   DateTime _dateTime;
-  String payment = 'Tap to Select\nPayment Method';
-
-  void _simpanTiket() {
-    FirebaseFirestore.instance.runTransaction((transaction) async {
-      CollectionReference reference =
-          FirebaseFirestore.instance.collection("dataTiket");
-      await reference.add({
-        "Place": widget.detailPage.name,
-        "Date": time,
-        "Price": "${jml * widget.detailPage.price}",
-        "Traveler": jml,
-        "Payment": payment
-      });
-    });
-  }
+  String payment = 'Ketuk untuk \nMemilih';
 
   void _add() {
     setState(() {
@@ -159,7 +145,7 @@ class _BookingPageState extends State<BookingPage> {
                                     height: 2,
                                   ),
                                   Text(
-                                    "Current Balance",
+                                    "Saldo Kamu",
                                     style: greyTextStyle.copyWith(
                                       fontWeight: light,
                                     ),
@@ -188,7 +174,7 @@ class _BookingPageState extends State<BookingPage> {
               children: [
                 Expanded(
                   child: Text(
-                    'List Booking Item ',
+                    'Uraian Pesanan Kamu',
                     style: blackTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: medium,
@@ -250,7 +236,7 @@ class _BookingPageState extends State<BookingPage> {
                                 height: 3,
                               ),
                               Text(
-                                'Bali',
+                                widget.detailPage.spesialis,
                                 style: greyTextStyle.copyWith(
                                   fontWeight: light,
                                   fontSize: 14,
@@ -301,69 +287,10 @@ class _BookingPageState extends State<BookingPage> {
                       height: 10,
                     ),
                     RowDetails(
-                      det1: "Refferal Code",
+                      det1: "Kode Pesanan",
                       det2: randomAlphaNumeric(15),
                       clr: kBlueColor,
                       weight: semiBold,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Image.asset(
-                              "assets/ceklis.png",
-                              width: 30,
-                              height: 30,
-                            ),
-                            Text("Traveler(s)", style: blackTextStyle),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 120,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(color: kBlueColor)),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                      onTap: jml >= 2 ? _remove : null,
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                              color: kBlueColor,
-                                              border:
-                                                  Border.all(color: kBlueColor),
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          child: Icon(Icons.remove,
-                                              color: Colors.white))),
-                                  Text(jml.toString()),
-                                  GestureDetector(
-                                      onTap: _add,
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                              color: kBlueColor,
-                                              border:
-                                                  Border.all(color: kBlueColor),
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          child: Icon(Icons.add,
-                                              color: Colors.white)))
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 12,
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -371,8 +298,8 @@ class _BookingPageState extends State<BookingPage> {
                             context: context,
                             initialDate:
                                 _dateTime == null ? DateTime.now() : _dateTime,
-                            firstDate: DateTime(2021, 9, 7),
-                            lastDate: DateTime(2022));
+                            firstDate: DateTime(2022, 4, 13),
+                            lastDate: DateTime(2023));
 
                         if (_dateTime != null) {
                           setState(() {
@@ -383,40 +310,22 @@ class _BookingPageState extends State<BookingPage> {
                         }
                       },
                       child: RowDetails(
-                        det1: 'Date',
+                        det1: 'Tanggal',
                         det2: time,
                         clr: (_dateTime != null) ? kBlackColor : kRedColor,
                         weight: semiBold,
                       ),
                     ),
                     RowDetails(
-                      det1: 'Insurance',
-                      det2: 'YES',
-                      clr: kGreenColor,
-                      weight: semiBold,
-                    ),
-                    RowDetails(
-                      det1: 'Tax',
-                      det2: 'NO',
+                      det1: 'Pajak',
+                      det2: 'Tidak Ada',
                       clr: kBlackColor,
                       weight: semiBold,
                     ),
                     RowDetails(
-                      det1: 'Vaccinated Covid-19',
-                      det2: 'REQUIRE',
-                      clr: kGreenColor,
-                      weight: semiBold,
-                    ),
-                    RowDetails(
-                      det1: 'Price (per Ticket)',
-                      det2: r"$ " + widget.detailPage.price.toString(),
+                      det1: 'Harga',
+                      det2: r"Rp. " + widget.detailPage.price.toString(),
                       clr: kBlackColor,
-                      weight: semiBold,
-                    ),
-                    RowDetails(
-                      det1: 'Total Price',
-                      det2: r"$ " + "${jml * widget.detailPage.price}",
-                      clr: kBlueColor,
                       weight: semiBold,
                     ),
                     GestureDetector(
@@ -424,7 +333,7 @@ class _BookingPageState extends State<BookingPage> {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => SimpleDialog(
-                                  title: Text("Select Payment Method",
+                                  title: Text("Pilih Metode Pembayaran",
                                       style: blackTextStyle.copyWith(
                                         fontWeight: semiBold,
                                       )),
@@ -489,9 +398,9 @@ class _BookingPageState extends State<BookingPage> {
                                 ));
                       },
                       child: RowDetails(
-                        det1: 'Payment Method',
+                        det1: 'Metode Pembayaran',
                         det2: payment,
-                        clr: (payment == 'Tap to Select\nPayment Method')
+                        clr: (payment == 'Ketuk untuk \nMemilih')
                             ? kRedColor
                             : kBlackColor,
                         weight: semiBold,
@@ -512,17 +421,17 @@ class _BookingPageState extends State<BookingPage> {
                     onPressed: () {
                       if ((userState.user.balance >=
                               (jml * widget.detailPage.price)) &&
-                          time != 'Tap to Select the Date' &&
+                          time != 'Ketuk untuk Memilih' &&
                           payment == 'Account Balance') {
                         Alert(
                           context: context,
                           type: AlertType.warning,
-                          title: "Book Now?",
-                          desc: "Make Sure All of Your Data is Right!",
+                          title: "Pesan Sekarang?",
+                          desc: "Pastikan Data Sudah Benar!",
                           buttons: [
                             DialogButton(
                               child: Text(
-                                "Cancel",
+                                "Batal",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 20),
                               ),
@@ -531,7 +440,7 @@ class _BookingPageState extends State<BookingPage> {
                             ),
                             DialogButton(
                               child: Text(
-                                "Book!",
+                                "Pesan!",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 20),
                               ),
@@ -542,20 +451,33 @@ class _BookingPageState extends State<BookingPage> {
                                     builder: (context) => SuccessPage(),
                                   ),
                                 );
-                                _simpanTiket();
+                                FirebaseFirestore.instance
+                                    .runTransaction((transaction) async {
+                                  CollectionReference reference =
+                                      FirebaseFirestore.instance
+                                          .collection("dataTiket");
+                                  await reference.add({
+                                    "user_id": userState.user.id,
+                                    "Place": widget.detailPage.name,
+                                    "Date": time,
+                                    "Price": "${widget.detailPage.price}",
+                                    "Traveler": jml,
+                                    "Payment": payment
+                                  });
+                                });
                               },
                               width: 180,
                             ),
                           ],
                         ).show();
-                      } else if (time != 'Tap to Select the Date' &&
+                      } else if (time != 'Ketuk untuk Memilih' &&
                           payment != 'Account Balance' &&
-                          payment != 'Tap to Select Payment Method') {
+                          payment != 'Ketuk untuk \nMemilih') {
                         Alert(
                           context: context,
                           type: AlertType.warning,
-                          title: "Book Now?",
-                          desc: "Make Sure All of Your Data is Right!",
+                          title: "Pesan Sekarang?",
+                          desc: "Pastikan Data Sudah Benar!",
                           style: AlertStyle(
                             titleStyle: blackTextStyle.copyWith(
                               fontWeight: semiBold,
@@ -565,7 +487,7 @@ class _BookingPageState extends State<BookingPage> {
                           buttons: [
                             DialogButton(
                               child: Text(
-                                "Cancel",
+                                "Batal",
                                 style: GoogleFonts.poppins(
                                     color: Colors.white, fontSize: 20),
                               ),
@@ -574,7 +496,7 @@ class _BookingPageState extends State<BookingPage> {
                             ),
                             DialogButton(
                               child: Text(
-                                "Book!",
+                                "Pesan!",
                                 style: GoogleFonts.poppins(
                                     color: Colors.white, fontSize: 20),
                               ),
@@ -585,7 +507,20 @@ class _BookingPageState extends State<BookingPage> {
                                     builder: (context) => SuccessPage(),
                                   ),
                                 );
-                                _simpanTiket();
+                                FirebaseFirestore.instance
+                                    .runTransaction((transaction) async {
+                                  CollectionReference reference =
+                                      FirebaseFirestore.instance
+                                          .collection("dataTiket");
+                                  await reference.add({
+                                    "user_id": userState.user.id,
+                                    "Place": widget.detailPage.name,
+                                    "Date": time,
+                                    "Price": "${widget.detailPage.price}",
+                                    "Traveler": jml,
+                                    "Payment": payment
+                                  });
+                                });
                               },
                               width: 180,
                             ),
@@ -595,23 +530,23 @@ class _BookingPageState extends State<BookingPage> {
                         Alert(
                           context: context,
                           type: AlertType.error,
-                          title: "PAYMENT FAILED",
+                          title: "PEMBAYARAN GAGAL",
                           style: AlertStyle(
                             titleStyle: blackTextStyle.copyWith(
                               fontWeight: semiBold,
                             ),
                             descStyle: greyTextStyle,
                           ),
-                          desc: "Check your Date or Balance!",
+                          desc: "Periksa Tanggal atau Saldo Anda!",
                           buttons: [
                             DialogButton(
                               child: Text(
-                                "Charge",
+                                "Isi Ulang",
                                 style: GoogleFonts.poppins(
                                     color: Colors.white, fontSize: 20),
                               ),
                               onPressed: () => customLaunch(
-                                  "https://wa.me/+62822-9714-5285?text=Hey,%20I%20Want%20to%20Refill%20my%20Vacation%20App%20Balance,%20Please"),
+                                  "https://wa.me/+62822-9714-5285?text=Halo,%20Saya%20Ingin%20Isi%20Ulang%20Saldo%20SehatDok"),
                               width: 120,
                             )
                           ],
@@ -624,7 +559,7 @@ class _BookingPageState extends State<BookingPage> {
                       backgroundColor: kBlueColor,
                     ),
                     child: Text(
-                      'Pay Now',
+                      'Bayar Sekarang',
                       style: whiteTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: semiBold,

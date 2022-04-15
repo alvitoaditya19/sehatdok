@@ -39,7 +39,9 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnDetailPage();
     } else if (event is GoToSearchPage) {
       yield OnSearchPage();
-    } else if (event is GoToEditProfilePage) {
+    } else if (event is GoToSuccessPage) {
+      yield OnSuccessPage();
+    }else if (event is GoToEditProfilePage) {
       yield OnEditProfilePage(event.user);
     }
   }

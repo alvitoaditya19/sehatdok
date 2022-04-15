@@ -38,14 +38,14 @@ class _TicketPageState extends State<TicketPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "My Ticket(s)",
+                      "Pesanan Saya",
                       style: blackTextStyle.copyWith(
                         fontSize: 26,
                         fontWeight: semiBold,
                       ),
                     ),
                     Text(
-                      "Buy the ticket, take the vacation",
+                      "Pesan layanan Dokter ahli!",
                       style: greyTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: light,
@@ -66,19 +66,40 @@ class _TicketPageState extends State<TicketPage> {
               height: 8,
             ),
             Expanded(
-              child: MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                removeBottom: true,
-                child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection("dataTiket")
-                        .snapshots(),
+              child: BlocBuilder<UserBloc, UserState>(
+                builder: (_, userState) {
+                  if (userState is UserLoaded) {
+                    if (imageFileToUpload != null) {
+                      uploadImage(imageFileToUpload).then((downloadURL) {
+                        imageFileToUpload = null;
+                        context
+                            .bloc<UserBloc>()
+                            .add(UpdateData(profileImage: downloadURL));
+                      });
+                    }
+                    return MediaQuery.removePadding(
+                      context: context,
+                      removeTop: true,
+                      removeBottom: true,
+                      child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection("dataTiket")
+                            .where('user_id', isEqualTo: userState.user.id)
+                            .snapshots(),
                     builder: (_, snapshot) {
                       if (!snapshot.hasData)
                         return SpinKitCircle(color: kBlueColor, size: 100);
                       return TicketList(ticketInfo: snapshot.data.docs);
-                    }),
+                    }
+                      ),
+                    );
+                  } else {
+                    return SpinKitFadingCircle(
+                      color: kBlueColor,
+                      size: 50,
+                    );
+                  }
+                },
               ),
             )
           ],
@@ -109,7 +130,7 @@ class TicketList extends StatelessWidget {
               TicketPass(
                   height: 350,
                   alignment: Alignment.centerLeft,
-                  ticketTitle: Text('Paid',
+                  ticketTitle: Text('Lunas',
                       style: whiteTextStyle.copyWith(
                         fontSize: 18,
                         fontWeight: semiBold,
@@ -133,7 +154,7 @@ class TicketList extends StatelessWidget {
                             width: 10,
                           ),
                           Text(
-                            "Vacation Ticket",
+                            "Pesanan Anda",
                             style: blackTextStyle.copyWith(
                                 fontWeight: FontWeight.bold, fontSize: 18),
                           ),
@@ -157,11 +178,11 @@ class TicketList extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Destination",
+                                  Text("Nama Dokter",
                                       style: blackTextStyle.copyWith(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14)),
-                                  Text("Date",
+                                  Text("Tanggal",
                                       style: blackTextStyle.copyWith(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14))
@@ -199,34 +220,21 @@ class TicketList extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Traveler(s)",
-                                      style: blackTextStyle.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14)),
-                                  Text("Payment",
-                                      style: blackTextStyle.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14))
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
+                                  Expanded(
+                                    child: Text("Metode Pembayaran :",
+                                        style: blackTextStyle.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                  ),
                                   Text(
-                                      ticketInfo[index]
-                                          .data()["Traveler"]
-                                          .toString(),
-                                      style: greyTextStyle.copyWith(
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 14)),
-                                  Text(
-                                      ticketInfo[index]
-                                          .data()["Payment"]
-                                          .toString(),
-                                      style: greyTextStyle.copyWith(
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 14))
+                                    ticketInfo[index]
+                                        .data()["Payment"]
+                                        .toString(),
+                                    style: greyTextStyle.copyWith(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 14),
+                                    overflow: TextOverflow.ellipsis,
+                                  )
                                 ],
                               ),
                               SizedBox(
@@ -235,7 +243,7 @@ class TicketList extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("Total Price",
+                                  Text("Total Harga",
                                       style: blackTextStyle.copyWith(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16)),

@@ -10,29 +10,27 @@ class DetailPage extends StatefulWidget {
   final String spesialis;
   final String userId;
 
-  DetailPage({
-    this.imageUrl,
-    this.name,
-    this.rating,
-    this.address,
-    this.price,
-    this.gmaps,
-    this.spesialis,
-    this.userId
-  });
-  
+  DetailPage(
+      {this.imageUrl,
+      this.name,
+      this.rating,
+      this.address,
+      this.price,
+      this.gmaps,
+      this.spesialis,
+      this.userId});
+
   @override
   _DetailPageState createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
-
   void customLaunch(command) async {
-      await launch(command); 
+    await launch(command);
   }
+
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: kWhiteColor,
       body: SafeArea(
@@ -141,11 +139,11 @@ class _DetailPageState extends State<DetailPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Price starts from',
+                              'Harga mulai dari',
                               style: blackTextStyle,
                             ),
                             Text(
-                              '\$' + widget.price.toString(),
+                              '\Rp. ' + widget.price.toString(),
                               style: blueTextStyle.copyWith(
                                   fontSize: 16, fontWeight: semiBold),
                             )
@@ -158,7 +156,7 @@ class _DetailPageState extends State<DetailPage> {
                       Padding(
                         padding: EdgeInsets.only(left: defaultMargin),
                         child: Text(
-                          'Main Facilities',
+                          'Fasilitas',
                           style: blackTextStyle.copyWith(
                             fontSize: 18,
                           ),
@@ -175,15 +173,15 @@ class _DetailPageState extends State<DetailPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             FacilityItem(
-                              name: 'Consultation',
+                              name: 'Konsultasi',
                               imageUrl: 'assets/icon_chat2.png',
                             ),
                             FacilityItem(
-                              name: '24 Hours',
+                              name: '10 Jam Kerja',
                               imageUrl: 'assets/icon_alarm.png',
                             ),
                             FacilityItem(
-                              name: 'Best Recipe',
+                              name: 'Resep Terbaik',
                               imageUrl: 'assets/icon_drug.png',
                             ),
                           ],
@@ -199,7 +197,7 @@ class _DetailPageState extends State<DetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Popular Spot',
+                              'Dokter Terkait',
                               style: blackTextStyle.copyWith(
                                 fontSize: 18,
                               ),
@@ -229,10 +227,10 @@ class _DetailPageState extends State<DetailPage> {
                                   PopularSpot(
                                     imageUrl: 'assets/image_doctor6.jpeg',
                                   ),
-                                   PopularSpot(
+                                  PopularSpot(
                                     imageUrl: 'assets/image_doctor7.png',
                                   ),
-                                   PopularSpot(
+                                  PopularSpot(
                                     imageUrl: 'assets/image_doctor8.png',
                                   ),
                                 ],
@@ -246,55 +244,6 @@ class _DetailPageState extends State<DetailPage> {
                           top: 18,
                           left: defaultMargin,
                           right: defaultMargin,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Location',
-                              style: blackTextStyle.copyWith(
-                                fontSize: 18,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 14,
-                            ),
-                            Row(children: [
-                              Expanded(
-                                child: Text(
-                                 widget.name + ', Bali',
-                                  style: greyTextStyle.copyWith(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: (){
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => WebViewPage(detailPage: DetailPage(
-                                          name: widget.name,
-                                          gmaps: widget.gmaps,
-                                          )),
-                                      ),
-                                    );
-                                },
-                                child: Container(
-                                  height: 42,
-                                  width: 42,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image:
-                                          AssetImage('assets/icon_location.png'),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ])
-                          ],
                         ),
                       ),
                       Container(
@@ -326,33 +275,56 @@ class _DetailPageState extends State<DetailPage> {
                             Expanded(
                               child: Container(
                                 height: 54,
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => BookingPage(detailPage: DetailPage(
-                                   
-                                          imageUrl: widget.imageUrl,
-                                          name: widget.name,
-                                          price: widget.price,
-                                          rating: widget.rating,)),
-                                      ),
-                                    );
+                                child: BlocBuilder<UserBloc, UserState>(
+                                  builder: (_, userState) {
+                                    if (userState is UserLoaded) {
+                                      if (imageFileToUpload != null) {
+                                        uploadImage(imageFileToUpload)
+                                            .then((downloadURL) {
+                                          imageFileToUpload = null;
+                                          context.bloc<UserBloc>().add(
+                                              UpdateData(
+                                                  profileImage: downloadURL));
+                                        });
+                                      }
+                                      return TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => BookingPage(
+                                                  detailPage: DetailPage(
+                                                userId: userState.user.id,
+                                                imageUrl: widget.imageUrl,
+                                                name: widget.name,
+                                                spesialis: widget.spesialis,
+                                                price: widget.price,
+                                                rating: widget.rating,
+                                              )),
+                                            ),
+                                          );
+                                        },
+                                        style: TextButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12)),
+                                          backgroundColor: kBlueColor,
+                                        ),
+                                        child: Text(
+                                          'Lanjut Pemesanan',
+                                          style: whiteTextStyle.copyWith(
+                                            fontSize: 16,
+                                            fontWeight: semiBold,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return SpinKitFadingCircle(
+                                        color: kBlueColor,
+                                        size: 50,
+                                      );
+                                    }
                                   },
-                                  style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12)),
-                                    backgroundColor: kBlueColor,
-                                  ),
-                                  child: Text(
-                                    'Book Now',
-                                    style: whiteTextStyle.copyWith(
-                                      fontSize: 16,
-                                      fontWeight: semiBold,
-                                    ),
-                                  ),
                                 ),
                               ),
                             )

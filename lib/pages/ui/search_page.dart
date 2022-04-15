@@ -16,7 +16,7 @@ class _SearchPageState extends State<SearchPage> {
       "spesialis": "Dokter Umum",
       "imageUrl": 'assets/image_doctor1.jpg',
       "rating": 4.9.toDouble(),
-      "price": 27.toDouble(),
+      "price": 270000,
     },
     {
       "id": 2,
@@ -24,7 +24,7 @@ class _SearchPageState extends State<SearchPage> {
       "spesialis": "Spesialis Penyakit Dalam",
       "imageUrl": 'assets/image_doctor2.jpg',
       "rating": 4.9.toDouble(),
-      "price": 12.toDouble(),
+      "price": 120000,
     },
     {
       "id": 3,
@@ -32,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
       "spesialis": "Spesialis THT",
       "imageUrl": 'assets/image_doctor3.jpg',
       "rating": 4.8.toDouble(),
-      "price": 17.toDouble(),
+      "price": 170000,
     },
     {
       "id": 4,
@@ -40,7 +40,7 @@ class _SearchPageState extends State<SearchPage> {
       "spesialis": "Spesialis Urologi",
       "imageUrl": 'assets/image_doctor4.jpg',
       "rating": 4.8.toDouble(),
-      "price": 9.toDouble(),
+      "price": 190000,
     },
     {
       "id": 5,
@@ -48,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
       "spesialis": "Spesialis Bedah Saraf",
       "imageUrl": 'assets/image_doctor5.jpg',
       "rating": 4.5.toDouble(),
-      "price": 8.toDouble(),
+      "price": 80000,
     },
     {
       "id": 6,
@@ -56,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
       "spesialis": "Spesialis Bedah",
       "imageUrl": 'assets/image_doctor6.jpeg',
       "rating": 4.4.toDouble(),
-      "price": 21.toDouble(),
+      "price": 210000,
     },
     {
       "id": 7,
@@ -64,7 +64,7 @@ class _SearchPageState extends State<SearchPage> {
       "spesialis": "Spesialis Kedokteran Jiwa",
       "imageUrl": 'assets/image_doctor7.png',
       "rating": 4.3.toDouble(),
-      "price": 18.toDouble(),
+      "price": 180000,
     },
     {
       "id": 8,
@@ -72,7 +72,7 @@ class _SearchPageState extends State<SearchPage> {
       "spesialis": "Spesialis Mata",
       "imageUrl": 'assets/image_doctor8.png',
       "rating": 4.4.toDouble(),
-      "price": 7.toDouble(),
+      "price": 170000,
     },
   ];
 
@@ -142,7 +142,7 @@ class _SearchPageState extends State<SearchPage> {
                       onChanged: (value) => _runFilter(value),
                       style: greyTextStyle,
                       decoration: InputDecoration.collapsed(
-                        hintText: 'Find a Magical Place',
+                        hintText: 'Temukan doktermu',
                         hintStyle: greyTextStyle,
                       ),
                     ),

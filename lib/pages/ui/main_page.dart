@@ -210,7 +210,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                   BottomNavigationBarItem(
                       title: Text(
-                        "My Tickets",
+                        "Pesanan Saya",
                         style: (bottomNavBarIndex == 1)
                             ? blueTextStyle.copyWith(
                                 fontSize: 14,

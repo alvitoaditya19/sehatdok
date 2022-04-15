@@ -54,6 +54,7 @@ dependencies:
   ticket_pass_package: ^0.1.0
   syncfusion_flutter_barcodes: ^19.3.47
   webview_flutter: ^2.0.13
+  expansion_tile_card: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.

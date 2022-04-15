@@ -47,7 +47,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         height: 20,
                       ),
                       Text(
-                        "Edit Your\nProfile",
+                        "Ubah Profilmu",
                         textAlign: TextAlign.center,
                         style: blackTextStyle.copyWith(fontSize: 20),
                       ),
@@ -119,7 +119,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30)),
-                            labelText: "User ID",
+                            labelText: "ID Pengguna",
                           ),
                         ),
                       ),
@@ -134,7 +134,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30)),
-                            labelText: "Email Address",
+                            labelText: "Alamat Email",
                           ),
                         ),
                       ),
@@ -155,8 +155,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30)),
-                            labelText: "Full Name",
-                            hintText: "Full Name"),
+                            labelText: "Nama Lengkap",
+                            hintText: "Nama Lengkap"),
                       ),
                       SizedBox(
                         height: 30,
@@ -180,7 +180,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   width: 5,
                                 ),
                                 Text(
-                                  "Change Password",
+                                  "Ubah Kata Sandi",
                                   style: whiteTextStyle.copyWith(
                                       fontSize: 16,
                                       color: (isUpdating)
@@ -233,7 +233,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8)),
                                   child: Text(
-                                    "Update My Profile",
+                                    "Perbarui",
                                     style: whiteTextStyle.copyWith(
                                         fontSize: 16,
                                         color: (isDataEdited)
@@ -276,7 +276,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             print("Confirm Action $action");
                           },
                           child: Text(
-                            "Log Out",
+                            "Keluar",
                             style: whiteTextStyle.copyWith(
                                 fontSize: 15, fontWeight: FontWeight.w500),
                           )),
@@ -317,17 +317,17 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
           borderRadius: BorderRadius.circular(20),
         ),
         title: Text(
-          'Log Out',
+          'Keluar',
           style: blackTextStyle.copyWith(fontSize: 25),
         ),
         content: Text(
-          'Are you sure?',
+          'Kamu Yakin?',
           style: blackTextStyle.copyWith(fontSize: 20),
         ),
         actions: <Widget>[
           FlatButton(
             child: Text(
-              'Cancel',
+              'Batal',
               style: blueTextStyle.copyWith(
                   fontSize: 15, fontWeight: FontWeight.w700),
             ),
@@ -337,7 +337,7 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
           ),
           FlatButton(
             child: Text(
-              'Logout',
+              'Keluar',
               style: redTextStyle.copyWith(
                   fontSize: 15, fontWeight: FontWeight.w500),
             ),

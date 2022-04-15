@@ -91,6 +91,11 @@ class OnNotePage extends PageState {
   List<Object> get props => [];
 }
 
+class OnSuccessPage extends PageState {
+  @override
+  List<Object> get props => [];
+}
+
 class OnEditProfilePage extends PageState {
   final User user;
 

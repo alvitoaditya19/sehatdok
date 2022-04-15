@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sehatdok/shared/shared.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 
 class TipsKes extends StatelessWidget {
   TipsKes({Key key}) : super(key: key);
@@ -30,10 +34,6 @@ class TipsKes extends StatelessWidget {
                       height: 40,
                     ),
                   ),
-                  // Image.asset(
-                  //   'assets/btn_wishlist.png',
-                  //   width: 40,
-                  // ),
                 ],
               ),
             ),
@@ -50,52 +50,24 @@ class TipsKes extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Jagalah Tubuhmu Setiap Harinya',
+                    'Jagalah Tubuhmu Setiap Harinya. Berikut Tips Kesehatan hanya Untukmu!',
                     style: greyTextStyle.copyWith(
                       fontWeight: light,
                       fontSize: 16,
                     ),
                   ),
                   SizedBox(
-                    height: 24,
-                  ),
-                  Container(
-                    height: 230,
-                    width: double.infinity,
-                    margin: EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/image_sehat.png'),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 24,
-                    ),
-                    child: Text(
-                      'Ada banyak cara untuk menjaga pola hidup sehat. Salah satu hal paling penting yaitu untuk tidak melewatkan sarapan.',
-                      style: blackTextStyle.copyWith(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 14,
-                    ),
-                    child: Text(
-                      'Penelitian yang dikutip oleh Livescience.com menyebutkan bahwa orang yang melewatkan sarapan cenderung mengalami peningkatan berat badan dibanding dengan yang tidak melewatkannya karena orang cenderung merasa lapar pada siang hari. Saat menahan lapar, hormon leptin akan dikeluarkan dan menyebabkan meningkatnya nafsuk makan tanpa terkendali.',
-                      style: blackTextStyle.copyWith(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
                     height: 30,
-                  )
+                  ),
+                  StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection("tipsKesehatan")
+                          .snapshots(),
+                      builder: (_, snapshot) {
+                        if (!snapshot.hasData)
+                          return SpinKitCircle(color: kBlueColor, size: 100);
+                        return HealthList(healthInfo: snapshot.data.docs);
+                      })
                 ],
               ),
             ),
@@ -103,5 +75,59 @@ class TipsKes extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class HealthList extends StatelessWidget {
+  final List<DocumentSnapshot> healthInfo;
+  final GlobalKey<ExpansionTileCardState> cardA = new GlobalKey();
+
+  HealthList({
+    Key key,
+    this.healthInfo,
+  }) : super(key: key);
+
+  void customLaunch(command) async {
+    await launch(command);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        padding: EdgeInsets.only(bottom: 60),
+        shrinkWrap: true,
+        itemCount: healthInfo.length,
+        itemBuilder: (_, index) {
+          return ExpansionTileCard(
+            baseColor: Colors.cyan[50],
+            expandedColor: Colors.red[50],
+            key: cardA,
+            leading: CircleAvatar(
+                child: Image.network(
+                    healthInfo[index].data()["gambar"].toString())),
+            title: Text(healthInfo[index].data()["judul"].toString(), style: blackTextStyle,),
+            children: <Widget>[
+              Divider(
+                thickness: 1.0,
+                height: 1.0,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  child: Text(
+                    healthInfo[index].data()["deskripsi"].toString(),
+                    style: blackTextStyle.copyWith(
+                      fontSize: 16,
+                    )
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
